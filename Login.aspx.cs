@@ -1,6 +1,6 @@
 using System;
 using System.Data;
-using System.Data.SqlClient;
+using Mono.Data.Sqlite;
 
 public partial class Login : System.Web.UI.Page
 {
@@ -25,15 +25,15 @@ public partial class Login : System.Web.UI.Page
                 // Note: It's important NOT to expose whether username exists separately from password failure.
                 string query = "SELECT StudentId, FullName, Username FROM Students WHERE Username = @Username AND Password = @Password";
                 
-                using (SqlConnection con = DatabaseHelper.GetConnection())
+                using (SqliteConnection con = DatabaseHelper.GetConnection())
                 {
-                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    using (SqliteCommand cmd = new SqliteCommand(query, con))
                     {
-                        cmd.Parameters.Add(new SqlParameter("@Username", username));
-                        cmd.Parameters.Add(new SqlParameter("@Password", password));
+                        cmd.Parameters.Add(new SqliteParameter("@Username", username));
+                        cmd.Parameters.Add(new SqliteParameter("@Password", password));
 
                         con.Open();
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        using (SqliteDataReader reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
                             {

@@ -1,7 +1,6 @@
 using System;
 using System.Data;
-using System.Data.SqlClient;
-
+using Mono.Data.Sqlite;
 public partial class ForgotPassword : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
@@ -17,7 +16,7 @@ public partial class ForgotPassword : System.Web.UI.Page
 
             try
             {
-                using (SqlConnection con = DatabaseHelper.GetConnection())
+                using (SqliteConnection con = DatabaseHelper.GetConnection())
                 {
                     con.Open();
 
@@ -25,9 +24,9 @@ public partial class ForgotPassword : System.Web.UI.Page
                     string checkQuery = "SELECT StudentId FROM Students WHERE Username = @Identifier OR Email = @Identifier";
                     int studentId = 0;
 
-                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, con))
+                    using (SqliteCommand checkCmd = new SqliteCommand(checkQuery, con))
                     {
-                        checkCmd.Parameters.Add(new SqlParameter("@Identifier", identifier));
+                        checkCmd.Parameters.Add(new SqliteParameter("@Identifier", identifier));
                         object result = checkCmd.ExecuteScalar();
 
                         if (result != null)
@@ -45,10 +44,10 @@ public partial class ForgotPassword : System.Web.UI.Page
                     if (studentId > 0)
                     {
                         string updateQuery = "UPDATE Students SET Password = @NewPassword WHERE StudentId = @StudentId";
-                        using (SqlCommand updateCmd = new SqlCommand(updateQuery, con))
+                        using (SqliteCommand updateCmd = new SqliteCommand(updateQuery, con))
                         {
-                            updateCmd.Parameters.Add(new SqlParameter("@NewPassword", newPassword));
-                            updateCmd.Parameters.Add(new SqlParameter("@StudentId", studentId));
+                            updateCmd.Parameters.Add(new SqliteParameter("@NewPassword", newPassword));
+                            updateCmd.Parameters.Add(new SqliteParameter("@StudentId", studentId));
 
                             int rowsAffected = updateCmd.ExecuteNonQuery();
 

@@ -1,6 +1,6 @@
 using System;
 using System.Data;
-using System.Data.SqlClient;
+using Mono.Data.Sqlite;
 
 public partial class Registration : System.Web.UI.Page
 {
@@ -24,16 +24,16 @@ public partial class Registration : System.Web.UI.Page
 
             try
             {
-                using (SqlConnection con = DatabaseHelper.GetConnection())
+                using (SqliteConnection con = DatabaseHelper.GetConnection())
                 {
                     con.Open();
 
                     // 1. Check if email exists
                     string emailCheckQuery = "SELECT COUNT(*) FROM Students WHERE Email = @Email";
-                    using (SqlCommand emailCmd = new SqlCommand(emailCheckQuery, con))
+                    using (SqliteCommand emailCmd = new SqliteCommand(emailCheckQuery, con))
                     {
-                        emailCmd.Parameters.Add(new SqlParameter("@Email", email));
-                        int emailCount = (int)emailCmd.ExecuteScalar();
+                        emailCmd.Parameters.Add(new SqliteParameter("@Email", email));
+                        int emailCount = Convert.ToInt32(emailCmd.ExecuteScalar());
                         if (emailCount > 0)
                         {
                             ShowMessage("Email address is already registered.", false);
@@ -43,10 +43,10 @@ public partial class Registration : System.Web.UI.Page
 
                     // 2. Check if username exists
                     string userCheckQuery = "SELECT COUNT(*) FROM Students WHERE Username = @Username";
-                    using (SqlCommand userCmd = new SqlCommand(userCheckQuery, con))
+                    using (SqliteCommand userCmd = new SqliteCommand(userCheckQuery, con))
                     {
-                        userCmd.Parameters.Add(new SqlParameter("@Username", username));
-                        int userCount = (int)userCmd.ExecuteScalar();
+                        userCmd.Parameters.Add(new SqliteParameter("@Username", username));
+                        int userCount = Convert.ToInt32(userCmd.ExecuteScalar());
                         if (userCount > 0)
                         {
                             ShowMessage("Username is already taken.", false);
@@ -58,12 +58,12 @@ public partial class Registration : System.Web.UI.Page
                     string insertQuery = @"INSERT INTO Students (FullName, Email, Username, Password) 
                                            VALUES (@FullName, @Email, @Username, @Password)";
                     
-                    using (SqlCommand insertCmd = new SqlCommand(insertQuery, con))
+                    using (SqliteCommand insertCmd = new SqliteCommand(insertQuery, con))
                     {
-                        insertCmd.Parameters.Add(new SqlParameter("@FullName", fullName));
-                        insertCmd.Parameters.Add(new SqlParameter("@Email", email));
-                        insertCmd.Parameters.Add(new SqlParameter("@Username", username));
-                        insertCmd.Parameters.Add(new SqlParameter("@Password", password));
+                        insertCmd.Parameters.Add(new SqliteParameter("@FullName", fullName));
+                        insertCmd.Parameters.Add(new SqliteParameter("@Email", email));
+                        insertCmd.Parameters.Add(new SqliteParameter("@Username", username));
+                        insertCmd.Parameters.Add(new SqliteParameter("@Password", password));
 
                         int rowsAffected = insertCmd.ExecuteNonQuery();
 

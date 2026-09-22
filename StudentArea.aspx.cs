@@ -1,5 +1,5 @@
 using System;
-using System.Data.SqlClient;
+using Mono.Data.Sqlite;
 
 public partial class StudentArea : System.Web.UI.Page
 {
@@ -26,14 +26,14 @@ public partial class StudentArea : System.Web.UI.Page
             // Retrieve data directly from database to ensure it's up to date
             string query = "SELECT FullName, Username, Email, CreatedAt FROM Students WHERE StudentId = @StudentId";
 
-            using (SqlConnection con = DatabaseHelper.GetConnection())
+            using (SqliteConnection con = DatabaseHelper.GetConnection())
             {
-                using (SqlCommand cmd = new SqlCommand(query, con))
+                using (SqliteCommand cmd = new SqliteCommand(query, con))
                 {
-                    cmd.Parameters.Add(new SqlParameter("@StudentId", studentId));
+                    cmd.Parameters.Add(new SqliteParameter("@StudentId", studentId));
 
                     con.Open();
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqliteDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
