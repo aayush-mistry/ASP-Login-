@@ -1,0 +1,37 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.Master.cs" Inherits="SiteMaster" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - Student Portal</title>
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <header class="navbar">
+            <a href="Login.aspx" class="nav-brand">Student Portal</a>
+            <nav class="nav-links">
+                <asp:PlaceHolder ID="GuestNav" runat="server">
+                    <a href="Login.aspx">Login</a>
+                    <a href="Registration.aspx">Register</a>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="StudentNav" runat="server" Visible="false">
+                    <a href="StudentArea.aspx">Student Area</a>
+                    <a href="Logout.aspx">Logout</a>
+                </asp:PlaceHolder>
+            </nav>
+        </header>
+
+        <div class="container">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+    
+    <script src="Scripts/auth.js"></script>
+</body>
+</html>
